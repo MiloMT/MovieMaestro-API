@@ -1,8 +1,21 @@
-// import Models & Close Connection Script
+import closeConnection from "../src/config/db.js"
+import UserModel from "../src/models/userModel.js"
 
-// initialize array of new users
+const users = [
+    {
+        "name": "Myles"
+    },
+    {
+        "name": "Yoshi"
+    },
+    {
+        "name": "Mitch"
+    }
+]
 
-// delete current users
-// insert new users
+await UserModel.deleteMany()
+console.log('Deleted users')
+const usrs = await UserModel.insertMany(users)
+console.log('Added users')
 
-// closeConnection()
+closeConnection()
