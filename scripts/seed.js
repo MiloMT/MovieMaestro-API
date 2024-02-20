@@ -5,6 +5,7 @@ const users = [
     {
         "name": "Myles",
         "email": "fake@fake.com",
+        "password": "password",
         "language": "en-au",
         "streamingPlatform": [
             "Netflix",
@@ -20,6 +21,7 @@ const users = [
     {
         "name": "Yoshi",
         "email": "fake1@fake.com",
+        "password": "password",
         "language": "en-au",
         "streamingPlatform": [
             "Netflix",
@@ -35,6 +37,7 @@ const users = [
     {
         "name": "Mitch",
         "email": "fake2@fake.com",
+        "password": "password",
         "language": "en-au",
         "streamingPlatform": [
             "Netflix",
