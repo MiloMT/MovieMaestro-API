@@ -23,6 +23,13 @@ const usersSchema = new mongoose.Schema({
         validate: [validateEmail, 'Please fill a valid email address'],
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
     },
+    password: {
+        type: String,
+        trim: true,
+        minlength: [5, "Your password must be a minimum of 5 characters long"],
+        maxlength: [100, "The Email address can be a maximum of 100 characters long"],
+        required: [true, "Password is required"]
+    },
     language: { 
         type: String
     },
@@ -35,6 +42,10 @@ const usersSchema = new mongoose.Schema({
     wishList: [{ 
         type: String 
     }],
+    isAdmin: {
+        type: Boolean,
+        default: false
+    }
 })
 
 export default usersSchema
