@@ -1,12 +1,12 @@
 import { Router } from "express"
 import UserModel from "../models/userModel.js"
 import { authenticateToken, generateAccessToken } from "../middlewares/authenticateToken.js"
-import dotenv from "dotenv"
+// import dotenv from "dotenv"
 import bcrypt from "bcrypt"
 
 const userRoutes = Router()
 
-dotenv.config()
+// dotenv.config()
 
 userRoutes.get("/", authenticateToken, async (req, res) => {
     try {

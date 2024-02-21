@@ -1,10 +1,13 @@
 import bcrypt from "bcrypt"
 import closeConnection from "../src/config/db.js"
 import UserModel from "../src/models/userModel.js"
+import dotenv from "dotenv"
 
-const hashedPassword1 = await bcrypt.hash("password", 10)
-const hashedPassword2 = await bcrypt.hash("password", 10)
-const hashedPassword3 = await bcrypt.hash("password", 10)
+dotenv.config()
+
+const hashedPassword1 = await bcrypt.hash(process.env.TEST_PASSWORD, 10)
+const hashedPassword2 = await bcrypt.hash(process.env.TEST_PASSWORD, 10)
+const hashedPassword3 = await bcrypt.hash(process.env.TEST_PASSWORD, 10)
 
 const users = [
     {
