@@ -3,22 +3,28 @@ import jwt from "jsonwebtoken"
 import UserModel from "../models/userModel.js"
 import authenticateToken from "../middlewares/authenticateToken.js"
 import dotenv from "dotenv"
+import bcrypt from "bcrypt"
 
 const userRoutes = Router()
 
 dotenv.config()
 
-function generateAccessToken(user) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1hr" })
+function generateAccessToken(email) {
+    return jwt.sign(email, process.env.ACCESS_TOKEN_SECRET)
 }
 
 userRoutes.get("/", authenticateToken, async (req, res) => {
     res.send(await UserModel.find({ email: req.user.email }))
 })
 
-userRoutes.post("/", authenticateToken, async (req, res) => {
+userRoutes.post("/", async (req, res) => {
     try {
-        const insertedEntry = await (await UserModel.create(req.body))
+        const hashedPassword = await bcrypt.hash(req.body.password, 10)
+        const insertedEntry = await (await UserModel.create({
+            name: req.body.name,
+            email: req.body.email,
+            password: hashedPassword
+        }))
         res.status(201).send(insertedEntry)
     }
     catch (err) {
@@ -27,18 +33,26 @@ userRoutes.post("/", authenticateToken, async (req, res) => {
 })
 
 userRoutes.post("/login", async (req, res) => {
-    // Authenticate user
+    const user = await UserModel.findOne({ email: req.body.email })
 
-    const email = req.body.email
-    const user = { email: email }
+    if (user == null) {
+        return res.status(400).send({ status: "Incorrect Email or Password" })
+    }
 
-    const accessToken = generateAccessToken(user)
-    const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET)
-    refreshTokens.push(refreshToken)
-    res.json({ accessToken: accessToken, refreshToken: refreshToken })
+    try {
+        if (await bcrypt.compare(req.body.password, user.password)) {
+            const accessToken = generateAccessToken(user.email)
+            // const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET)
+            // refreshTokens.push(refreshToken)
+            res.json({ status: "Successful Login", accessToken: accessToken })
+        }
+    } catch {
+        res.status(500).send({ status: "Incorrect Email or Password" })
+    }
 })
 
 // To decide whether to implement refresh tokens down the track
+
 // userRoutes.post("/token", async (req, res) => {
 //     const refreshToken = req.body.token
 //     if (refreshToken == null) {
