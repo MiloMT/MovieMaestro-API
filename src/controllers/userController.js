@@ -42,6 +42,10 @@ const usersSchema = new mongoose.Schema({
     wishList: [{ 
         type: String 
     }],
+    isAdmin: {
+        type: Boolean,
+        default: false
+    }
 })
 
 export default usersSchema

@@ -1,11 +1,16 @@
+import bcrypt from "bcrypt"
 import closeConnection from "../src/config/db.js"
 import UserModel from "../src/models/userModel.js"
+
+const hashedPassword1 = await bcrypt.hash("password", 10)
+const hashedPassword2 = await bcrypt.hash("password", 10)
+const hashedPassword3 = await bcrypt.hash("password", 10)
 
 const users = [
     {
         "name": "Myles",
         "email": "fake@fake.com",
-        "password": "password",
+        "password": hashedPassword1,
         "language": "en-au",
         "streamingPlatform": [
             "Netflix",
@@ -16,12 +21,13 @@ const users = [
         ],
         "wishList": [
             "Beekeeper"
-        ]
+        ],
+        "isAdmin": true
     },
     {
         "name": "Yoshi",
         "email": "fake1@fake.com",
-        "password": "password",
+        "password": hashedPassword2,
         "language": "en-au",
         "streamingPlatform": [
             "Netflix",
@@ -32,12 +38,13 @@ const users = [
         ],
         "wishList": [
             "Beekeeper"
-        ]
+        ],
+        "isAdmin": true
     },
     {
         "name": "Mitch",
         "email": "fake2@fake.com",
-        "password": "password",
+        "password": hashedPassword3,
         "language": "en-au",
         "streamingPlatform": [
             "Netflix",
@@ -48,7 +55,8 @@ const users = [
         ],
         "wishList": [
             "Beekeeper"
-        ]
+        ],
+        "isAdmin": true
     }
 ]
 
