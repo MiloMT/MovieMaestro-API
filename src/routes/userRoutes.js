@@ -1,7 +1,6 @@
 import { Router } from "express"
-import jwt from "jsonwebtoken"
 import UserModel from "../models/userModel.js"
-import authenticateToken from "../middlewares/authenticateToken.js"
+import { authenticateToken, generateAccessToken } from "../middlewares/authenticateToken.js"
 import dotenv from "dotenv"
 import bcrypt from "bcrypt"
 
@@ -9,12 +8,25 @@ const userRoutes = Router()
 
 dotenv.config()
 
-function generateAccessToken(email) {
-    return jwt.sign(email, process.env.ACCESS_TOKEN_SECRET)
-}
-
 userRoutes.get("/", authenticateToken, async (req, res) => {
-    res.send(await UserModel.find({ email: req.user.email }))
+    try {
+        if (req.user.isAdmin) {
+            res.send(await UserModel.find())
+        } else {
+            const user = await UserModel.find({ email: req.user.email })
+            if (user) {
+                return res.send(user)
+            } else {
+                return res.status(400).send({ 
+                    error: "User not found" 
+                })
+            }
+        }
+    }
+    catch (err) {
+        res.status(500).send({ error: err.message })
+    }
+    
 })
 
 userRoutes.post("/", async (req, res) => {
@@ -41,7 +53,7 @@ userRoutes.post("/login", async (req, res) => {
 
     try {
         if (await bcrypt.compare(req.body.password, user.password)) {
-            const accessToken = generateAccessToken(user.email)
+            const accessToken = generateAccessToken(user)
             // const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET)
             // refreshTokens.push(refreshToken)
             res.json({ status: "Successful Login", accessToken: accessToken })
@@ -73,22 +85,28 @@ userRoutes.post("/login", async (req, res) => {
 //     res.sendStatus(204)
 // })
 
-userRoutes.get("/:id", async (req, res) => {
-    const entry = await UserModel.findById(req.params.id)
-    if (entry) {
-        res.send(entry)
+userRoutes.get("/:id", authenticateToken, async (req, res) => {
+    const user = await UserModel.findById(req.params.id)
+    if (user) {
+        res.send(user)
     } else {
-        res.status(404).send({ error: "Entry not found" })
+        res.status(404).send({ error: "User not found" })
     }
 })
 
-userRoutes.put("/:id", async (req, res) => {
+userRoutes.put("/:id", authenticateToken, async (req, res) => {
     try {
-        const updatedEntry = await UserModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        if (updatedEntry) {
-            res.send(updatedEntry)
+        if (req.user.id == req.params.id || req.user.isAdmin) {
+            const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
+            if (updatedUser) {
+                res.send(updatedUser)
+            } else {
+                res.status(404).send({ error: "User not found" })
+            }
         } else {
-            res.status(404).send({ error: "Entry not found" })
+            return res.status(401).send({ 
+                error: "You do not have sufficient permissions for this operation" 
+            })
         }
     }
     catch (err) {
@@ -96,13 +114,19 @@ userRoutes.put("/:id", async (req, res) => {
     }
 })
 
-userRoutes.delete("/:id", async (req, res) => {
+userRoutes.delete("/:id", authenticateToken, async (req, res) => {
     try {
-        const deletedEntry = await UserModel.findByIdAndDelete(req.params.id)
-        if (deletedEntry) {
-            res.sendStatus(204)
+        if (req.user.id == req.params.id || req.user.isAdmin) {
+            const deletedUser = await UserModel.findByIdAndDelete(req.params.id)
+            if (deletedUser) {
+                res.sendStatus(204)
+            } else {
+                res.status(404).send({ error: "User not found" })
+            }
         } else {
-            res.status(404).send({ error: "Entry not found" })
+            return res.status(401).send({ 
+                error: "You do not have sufficient permissions for this operation" 
+            })
         }
     }
     catch (err) {
