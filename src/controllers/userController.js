@@ -37,10 +37,36 @@ const usersSchema = new mongoose.Schema({
         type: String 
     }],
     watchList: [{ 
-        type: String 
+        "adult": { type: Boolean },
+        "backdrop_path": { type: String },
+        "genre_ids": [{ type: Number }],
+        "id": { type: Number },
+        "original_language": { type: String },
+        "original_title": { type: String },
+        "overview": { type: String },
+        "popularity": { type: Number },
+        "poster_path": { type: String },
+        "release_date": { type: String },
+        "title": { type: String },
+        "video": { type: Boolean },
+        "vote_average": { type: Number },
+        "vote_count": { type: Number },
     }],
     wishList: [{ 
-        type: String 
+        "adult": { type: Boolean },
+        "backdrop_path": { type: String },
+        "genre_ids": [{ type: Number }],
+        "id": { type: Number },
+        "original_language": { type: String },
+        "original_title": { type: String },
+        "overview": { type: String },
+        "popularity": { type: Number },
+        "poster_path": { type: String },
+        "release_date": { type: String },
+        "title": { type: String },
+        "video": { type: Boolean },
+        "vote_average": { type: Number },
+        "vote_count": { type: Number },
     }],
     isAdmin: {
         type: Boolean,
