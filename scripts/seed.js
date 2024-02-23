@@ -14,11 +14,12 @@ const users = [
         "name": "Myles",
         "email": "fake@fake.com",
         "password": hashedPassword1,
-        "language": "en-au",
+        "language": "en",
         "streamingPlatform": [
             "Netflix",
             "Binge"
         ],
+        "region": "AU",
         "watchList": [
         ],
         "wishList": [
@@ -29,11 +30,12 @@ const users = [
         "name": "Yoshi",
         "email": "fake1@fake.com",
         "password": hashedPassword2,
-        "language": "en-au",
+        "language": "ja",
         "streamingPlatform": [
             "Netflix",
             "Binge"
         ],
+        "region": "AU",
         "watchList": [
         ],
         "wishList": [
@@ -44,11 +46,12 @@ const users = [
         "name": "Mitch",
         "email": "fake2@fake.com",
         "password": hashedPassword3,
-        "language": "en-au",
+        "language": "en",
         "streamingPlatform": [
             "Netflix",
             "Binge"
         ],
+        "region": "JP",
         "watchList": [
         ],
         "wishList": [
