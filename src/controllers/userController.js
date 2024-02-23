@@ -36,6 +36,9 @@ const usersSchema = new mongoose.Schema({
     streamingPlatform: [{ 
         type: String 
     }],
+    region: {
+        type: String
+    },
     watchList: [{ 
         "adult": Boolean,
         "backdrop_path": String,
