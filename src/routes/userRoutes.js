@@ -1,12 +1,9 @@
 import { Router } from "express"
 import UserModel from "../models/userModel.js"
 import { authenticateToken, generateAccessToken } from "../middlewares/authenticateToken.js"
-// import dotenv from "dotenv"
 import bcrypt from "bcrypt"
 
 const userRoutes = Router()
-
-// dotenv.config()
 
 userRoutes.get("/", authenticateToken, async (req, res) => {
     try {
@@ -26,7 +23,6 @@ userRoutes.get("/", authenticateToken, async (req, res) => {
     catch (err) {
         res.status(500).send({ error: err.message })
     }
-    
 })
 
 userRoutes.post("/", async (req, res) => {
@@ -54,36 +50,12 @@ userRoutes.post("/login", async (req, res) => {
     try {
         if (await bcrypt.compare(req.body.password, user.password)) {
             const accessToken = generateAccessToken(user)
-            // const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET)
-            // refreshTokens.push(refreshToken)
             res.json({ status: "Successful Login", accessToken: accessToken })
         }
     } catch {
         res.status(500).send({ status: "Incorrect Email or Password" })
     }
 })
-
-// To decide whether to implement refresh tokens down the track
-
-// userRoutes.post("/token", async (req, res) => {
-//     const refreshToken = req.body.token
-//     if (refreshToken == null) {
-//         return res.sendStatus(401)
-//     }
-//     if (refreshTokens.includes(refreshToken)) {
-//         return res.sendStatus(403)
-//     }
-//     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-//         if (err) return res.sendStatus(403)
-//         const accessToken = generateAccessToken({ email: user.email })
-//         res.json({ accessToken: accessToken })
-//     })
-// })
-
-// app.delete("/logout", (req, res) => {
-//     refreshTokens = refreshTokens.filter(token => token !== req.body.token)
-//     res.sendStatus(204)
-// })
 
 userRoutes.get("/:id", authenticateToken, async (req, res) => {
     const user = await UserModel.findById(req.params.id)
@@ -94,7 +66,7 @@ userRoutes.get("/:id", authenticateToken, async (req, res) => {
     }
 })
 
-userRoutes.put("/:id", authenticateToken, async (req, res) => {
+userRoutes.patch("/:id", authenticateToken, async (req, res) => {
     try {
         if (req.user.id == req.params.id || req.user.isAdmin) {
             const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
@@ -122,6 +94,124 @@ userRoutes.delete("/:id", authenticateToken, async (req, res) => {
                 res.sendStatus(204)
             } else {
                 res.status(404).send({ error: "User not found" })
+            }
+        } else {
+            return res.status(401).send({ 
+                error: "You do not have sufficient permissions for this operation" 
+            })
+        }
+    }
+    catch (err) {
+        res.status(500).send({ error: err.message })
+    }
+})
+
+userRoutes.patch("/:id/watchList", authenticateToken, async (req, res) => {
+    try {
+        if (req.user.id == req.params.id || req.user.isAdmin) {
+            const user = await UserModel.findById(req.params.id)
+            if (!user.watchList.some(movie => movie.original_title === req.body.original_title)) {
+                user.watchList.push(req.body)  
+                const request = {
+                    "watchList": user.watchList
+                }
+                const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, request, { new: true })
+                if (updatedUser) {
+                    res.send(updatedUser)
+                } else {
+                    res.status(404).send({ error: "Operation not completed successfully" })
+                }
+            } else {
+                res.status(404).send({ error: "Movie already in watched list" })
+            }
+        } else {
+            return res.status(401).send({ 
+                error: "You do not have sufficient permissions for this operation" 
+            })
+        }
+    }
+    catch (err) {
+        res.status(500).send({ error: err.message })
+    }
+})
+
+userRoutes.delete("/:id/watchList", authenticateToken, async (req, res) => {
+    try {
+        if (req.user.id == req.params.id || req.user.isAdmin) {
+            const user = await UserModel.findById(req.params.id)
+            if (user.watchList.some(movie => movie.original_title === req.body.original_title)) {
+                const request = {
+                    "watchList": user.watchList.filter(movie => {
+                        movie.original_title !== req.body.original_title
+                    })
+                }
+                const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, request, { new: true })
+                if (updatedUser) {
+                    res.send(updatedUser)
+                } else {
+                    res.status(404).send({ error: "Operation not completed successfully" })
+                }
+            } else {
+                res.status(404).send({ error: "Movie not in Watched List" })
+            }
+        } else {
+            return res.status(401).send({ 
+                error: "You do not have sufficient permissions for this operation" 
+            })
+        }
+    }
+    catch (err) {
+        res.status(500).send({ error: err.message })
+    }
+})
+
+userRoutes.patch("/:id/wishList", authenticateToken, async (req, res) => {
+    try {
+        if (req.user.id == req.params.id || req.user.isAdmin) {
+            const user = await UserModel.findById(req.params.id)
+            if (!user.wishList.some(movie => movie.original_title === req.body.original_title)) {
+                user.wishList.push(req.body)  
+                const request = {
+                    "wishList": user.wishList
+                }
+                const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, request, { new: true })
+                if (updatedUser) {
+                    res.send(updatedUser)
+                } else {
+                    res.status(404).send({ error: "Operation not completed successfully" })
+                }
+            } else {
+                res.status(404).send({ error: "Movie already in watched list" })
+            }
+        } else {
+            return res.status(401).send({ 
+                error: "You do not have sufficient permissions for this operation" 
+            })
+        }
+    }
+    catch (err) {
+        res.status(500).send({ error: err.message })
+    }
+})
+
+userRoutes.delete("/:id/wishList", authenticateToken, async (req, res) => {
+    try {
+        if (req.user.id == req.params.id || req.user.isAdmin) {
+            const user = await UserModel.findById(req.params.id)
+            if (user.wishList.some(movie => movie.original_title === req.body.original_title)) {
+                const request = {
+                    "wishList": user.wishList.filter(movie => {
+                        movie.original_title !== req.body.original_title
+                    })
+                }
+                const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, request, { new: true })
+                if (updatedUser) {
+                    res.send(updatedUser)
+                } else {
+                    res.status(404).send({ error: "Operation not completed successfully" })
+                }
+            } else {
+                res.status(404).send({ error: "Movie not in Watched List" })
             }
         } else {
             return res.status(401).send({ 
