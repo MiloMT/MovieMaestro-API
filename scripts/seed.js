@@ -20,10 +20,8 @@ const users = [
             "Binge"
         ],
         "watchList": [
-            "Migration"
         ],
         "wishList": [
-            "Beekeeper"
         ],
         "isAdmin": true
     },
@@ -37,10 +35,8 @@ const users = [
             "Binge"
         ],
         "watchList": [
-            "Migration"
         ],
         "wishList": [
-            "Beekeeper"
         ],
         "isAdmin": true
     },
@@ -54,10 +50,8 @@ const users = [
             "Binge"
         ],
         "watchList": [
-            "Migration"
         ],
         "wishList": [
-            "Beekeeper"
         ],
         "isAdmin": true
     }
