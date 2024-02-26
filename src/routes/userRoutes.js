@@ -142,7 +142,7 @@ userRoutes.delete("/:id/watchList", authenticateToken, async (req, res) => {
             if (user.watchList.some(movie => movie.original_title === req.body.original_title)) {
                 const request = {
                     "watchList": user.watchList.filter(movie => {
-                        movie.original_title !== req.body.original_title
+                        return movie.original_title !== req.body.original_title
                     })
                 }
                 const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, request, { new: true })
@@ -181,7 +181,7 @@ userRoutes.patch("/:id/wishList", authenticateToken, async (req, res) => {
                     res.status(404).send({ error: "Operation not completed successfully" })
                 }
             } else {
-                res.status(404).send({ error: "Movie already in watched list" })
+                res.status(404).send({ error: "Movie already in wish list" })
             }
         } else {
             return res.status(401).send({ 
@@ -201,7 +201,7 @@ userRoutes.delete("/:id/wishList", authenticateToken, async (req, res) => {
             if (user.wishList.some(movie => movie.original_title === req.body.original_title)) {
                 const request = {
                     "wishList": user.wishList.filter(movie => {
-                        movie.original_title !== req.body.original_title
+                        return movie.original_title !== req.body.original_title
                     })
                 }
                 const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, request, { new: true })
@@ -211,7 +211,7 @@ userRoutes.delete("/:id/wishList", authenticateToken, async (req, res) => {
                     res.status(404).send({ error: "Operation not completed successfully" })
                 }
             } else {
-                res.status(404).send({ error: "Movie not in Watched List" })
+                res.status(404).send({ error: "Movie not in Wish List" })
             }
         } else {
             return res.status(401).send({ 
