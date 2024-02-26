@@ -145,7 +145,6 @@ userRoutes.delete("/:id/watchList", authenticateToken, async (req, res) => {
                         return movie.original_title !== req.body.original_title
                     })
                 }
-                console.log(request)
                 const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, request, { new: true })
                 if (updatedUser) {
                     res.send(updatedUser)
