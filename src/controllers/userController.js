@@ -30,30 +30,39 @@ const usersSchema = new mongoose.Schema({
         maxlength: [100, "The Email address can be a maximum of 100 characters long"],
         required: [true, "Password is required"]
     },
-    language: { 
-        type: String
+    language: {
+    type: Object,
+    properties: {
+        value: { type: String },
+        label: { type: String },
+        },
     },
     streamingPlatform: [{ 
-        type: String 
+        "value": { type: String },
+        "label": { type: String }
     }],
     region: {
-        type: String
+        type: Object,
+        properties: {
+            value: { type: String },
+            label: { type: String },
+        },
     },
     watchList: [{ 
-        "adult": Boolean,
-        "backdrop_path": String,
+        "adult": { type: Boolean },
+        "backdrop_path": { type: String },
         "genre_ids": [{ type: Number }],
-        "id": Number,
-        "original_language": String,
-        "original_title": String,
-        "overview": String,
-        "popularity": Number,
-        "poster_path": String,
-        "release_date": String,
-        "title": String,
-        "video": Boolean,
-        "vote_average": Number,
-        "vote_count": Number,
+        "id": { type: Number },
+        "original_language": { type: String },
+        "original_title": { type: String },
+        "overview": { type: String },
+        "popularity": { type: Number },
+        "poster_path": { type: String },
+        "release_date": { type: String },
+        "title": { type: String },
+        "video": { type: Boolean },
+        "vote_average": { type: Number },
+        "vote_count": { type: Number },
     }],
     wishList: [{ 
         "adult": { type: Boolean },

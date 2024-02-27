@@ -14,28 +14,36 @@ const users = [
         "name": "Myles",
         "email": "fake@fake.com",
         "password": hashedPassword1,
-        "language": "en",
-        "streamingPlatform": [
-            "Netflix",
-            "Binge"
-        ],
-        "region": "AU",
-        "watchList": [
-        ],
-        "wishList": [
-        ],
+        "language": {
+            "value": "en",
+            "label": "English"
+        },
+        "streamingPlatform": [{
+            "value": "8", "label": "Netflix"
+        }],
+        "region": {
+            "value": "AU",
+            "label": "Australia"
+        },
+        "watchList": [],
+        "wishList": [],
         "isAdmin": true
     },
     {
         "name": "Yoshi",
         "email": "fake1@fake.com",
         "password": hashedPassword2,
-        "language": "ja",
-        "streamingPlatform": [
-            "Netflix",
-            "Binge"
-        ],
-        "region": "AU",
+        "language": {
+            "value": "en",
+            "label": "English"
+        },
+        "streamingPlatform": [{
+            "value": "8", "label": "Netflix"
+        }],
+        "region": {
+            "value": "AU",
+            "label": "Australia"
+        },
         "watchList": [
         ],
         "wishList": [
@@ -46,12 +54,17 @@ const users = [
         "name": "Mitch",
         "email": "fake2@fake.com",
         "password": hashedPassword3,
-        "language": "en",
-        "streamingPlatform": [
-            "Netflix",
-            "Binge"
-        ],
-        "region": "JP",
+        "language": {
+            "value": "en",
+            "label": "English"
+        },
+        "streamingPlatform": [{
+            "value": "8", "label": "Netflix"
+        }],
+        "region": {
+            "value": "AU",
+            "label": "Australia"
+        },
         "watchList": [
         ],
         "wishList": [
