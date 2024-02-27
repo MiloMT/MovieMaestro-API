@@ -25,10 +25,8 @@ const users = [
             "value": "AU",
             "label": "Australia"
         },
-        "watchList": [
-        ],
-        "wishList": [
-        ],
+        "watchList": [],
+        "wishList": [],
         "isAdmin": true
     },
     {

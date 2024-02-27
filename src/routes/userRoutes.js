@@ -12,7 +12,7 @@ userRoutes.get("/", authenticateToken, async (req, res) => {
         } else {
             const user = await UserModel.find({ email: req.user.email })
             if (user) {
-                return res.send(user)
+                res.send(user)
             } else {
                 return res.status(400).send({ 
                     error: "User not found" 
