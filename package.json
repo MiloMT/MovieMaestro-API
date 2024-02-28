@@ -8,7 +8,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --watchAll",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "start": "node index.js",
     "seed": "node ./scripts/seed.js"
   },

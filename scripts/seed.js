@@ -8,6 +8,7 @@ dotenv.config()
 const hashedPassword1 = await bcrypt.hash(process.env.TEST_PASSWORD, 10)
 const hashedPassword2 = await bcrypt.hash(process.env.TEST_PASSWORD, 10)
 const hashedPassword3 = await bcrypt.hash(process.env.TEST_PASSWORD, 10)
+const hashedPassword4 = await bcrypt.hash(process.env.TEST_PASSWORD, 10)
 
 const users = [
     {
@@ -70,6 +71,27 @@ const users = [
         "wishList": [
         ],
         "isAdmin": true
+    },
+    {
+        "name": "User",
+        "email": "fake3@fake.com",
+        "password": hashedPassword4,
+        "language": {
+            "value": "en",
+            "label": "English"
+        },
+        "streamingPlatform": [{
+            "value": "8", "label": "Netflix"
+        }],
+        "region": {
+            "value": "AU",
+            "label": "Australia"
+        },
+        "watchList": [
+        ],
+        "wishList": [
+        ],
+        "isAdmin": false
     }
 ]
 
