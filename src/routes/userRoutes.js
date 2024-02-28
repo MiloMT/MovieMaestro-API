@@ -51,6 +51,8 @@ userRoutes.post("/login", async (req, res) => {
         if (await bcrypt.compare(req.body.password, user.password)) {
             const accessToken = generateAccessToken(user)
             res.json({ status: "Successful Login", accessToken: accessToken })
+        } else {
+            return res.status(400).send({ status: "Incorrect Email or Password" })
         }
     } catch {
         res.status(500).send({ status: "Incorrect Email or Password" })
