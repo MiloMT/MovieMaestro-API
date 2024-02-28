@@ -1,6 +1,7 @@
 import { Router } from "express"
 import UserModel from "../models/userModel.js"
-import { authenticateToken, generateAccessToken } from "../middlewares/authenticateToken.js"
+import authenticateToken from "../middlewares/authenticateToken.js"
+import generateAccessToken from "../middlewares/generateAccessToken.js"
 import bcrypt from "bcrypt"
 
 const userRoutes = Router()
@@ -14,7 +15,7 @@ userRoutes.get("/", authenticateToken, async (req, res) => {
             if (user) {
                 res.send(user)
             } else {
-                return res.status(400).send({ 
+                return res.status(404).send({ 
                     error: "User not found" 
                 })
             }
@@ -52,7 +53,7 @@ userRoutes.post("/login", async (req, res) => {
             const accessToken = generateAccessToken(user)
             res.json({ status: "Successful Login", accessToken: accessToken })
         } else {
-            return res.status(400).send({ status: "Incorrect Email or Password" })
+            return res.status(409).send({ status: "Incorrect Email or Password" })
         }
     } catch {
         res.status(500).send({ status: "Incorrect Email or Password" })
@@ -93,7 +94,7 @@ userRoutes.delete("/:id", authenticateToken, async (req, res) => {
         if (req.user.id == req.params.id || req.user.isAdmin) {
             const deletedUser = await UserModel.findByIdAndDelete(req.params.id)
             if (deletedUser) {
-                res.sendStatus(204)
+                res.status(200).send({ status: "User has been deleted" })
             } else {
                 res.status(404).send({ error: "User not found" })
             }
@@ -121,10 +122,10 @@ userRoutes.patch("/:id/watchList", authenticateToken, async (req, res) => {
                 if (updatedUser) {
                     res.send(updatedUser)
                 } else {
-                    res.status(404).send({ error: "Operation not completed successfully" })
+                    res.status(400).send({ error: "Operation not completed successfully" })
                 }
             } else {
-                res.status(404).send({ error: "Movie already in watched list" })
+                res.status(409).send({ error: "Movie already in watched list" })
             }
         } else {
             return res.status(401).send({ 
@@ -151,7 +152,7 @@ userRoutes.delete("/:id/watchList", authenticateToken, async (req, res) => {
                 if (updatedUser) {
                     res.send(updatedUser)
                 } else {
-                    res.status(404).send({ error: "Operation not completed successfully" })
+                    res.status(400).send({ error: "Operation not completed successfully" })
                 }
             } else {
                 res.status(404).send({ error: "Movie not in Watched List" })
@@ -180,10 +181,10 @@ userRoutes.patch("/:id/wishList", authenticateToken, async (req, res) => {
                 if (updatedUser) {
                     res.send(updatedUser)
                 } else {
-                    res.status(404).send({ error: "Operation not completed successfully" })
+                    res.status(400).send({ error: "Operation not completed successfully" })
                 }
             } else {
-                res.status(404).send({ error: "Movie already in wish list" })
+                res.status(409).send({ error: "Movie already in wish list" })
             }
         } else {
             return res.status(401).send({ 
@@ -210,7 +211,7 @@ userRoutes.delete("/:id/wishList", authenticateToken, async (req, res) => {
                 if (updatedUser) {
                     res.send(updatedUser)
                 } else {
-                    res.status(404).send({ error: "Operation not completed successfully" })
+                    res.status(400).send({ error: "Operation not completed successfully" })
                 }
             } else {
                 res.status(404).send({ error: "Movie not in Wish List" })
