@@ -31,10 +31,10 @@ const usersSchema = new mongoose.Schema({
         required: [true, "Password is required"]
     },
     language: {
-    type: Object,
-    properties: {
-        value: { type: String, required: true },
-        label: { type: String, required: true },
+        type: Object,
+        properties: {
+            value: { type: String, required: true },
+            label: { type: String, required: true },
         },
     },
     streamingPlatform: [{ 
@@ -84,6 +84,15 @@ const usersSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
+})
+
+// Performs validation on user object prior to saving
+usersSchema.pre("save", async function (next) {
+    const validationError = this.validateSync()
+    if (validationError) {
+        return next(validationError)
+    }
+    next()
 })
 
 export default usersSchema
