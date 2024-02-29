@@ -77,15 +77,11 @@ const users = [
         "email": "fake3@fake.com",
         "password": hashedPassword4,
         "language": {
-            "value": "en",
-            "label": "English"
         },
         "streamingPlatform": [{
             "value": "8", "label": "Netflix"
         }],
         "region": {
-            "value": "AU",
-            "label": "Australia"
         },
         "watchList": [
         ],
